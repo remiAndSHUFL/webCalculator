@@ -57,6 +57,7 @@
     "node-cache": "^5.1.1",
     "node-fetch": "2.6.7",
     "rhino3dm": "^7.15.0",
+    "solid-js": "^1.8.16",
     "throng": "4.0.0"
   },
   "devDependencies": {

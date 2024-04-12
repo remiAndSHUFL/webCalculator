@@ -1,0 +1,16 @@
+.set {
+    display: flex; /* This makes the children of this container align in a row */
+    align-items: center; /* This vertically centers the items in the row */
+    gap: 10px; /* This sets the space between items in the row */
+    padding: 10px 0; /* This adds vertical padding to each set for spacing */
+  }
+  
+  /* If you want a scrollbar at the bottom when the window width is too small */
+  body {
+    overflow-x: auto; /* This allows for horizontal scrolling of the entire page */
+  }
+/* Example style for labels, if needed */
+/* This ensures the label and component stay on the same line */
+.label, .component {
+    white-space: nowrap; /* Prevents wrapping within the label or component */
+  }
