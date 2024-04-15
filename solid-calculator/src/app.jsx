@@ -141,14 +141,14 @@ function App() {
     return JSON.parse(JSON.stringify(obj));
   };
 
-  // Function to copy a set of inputs
-  const copySet = (indexToCopy) => {
-    const sets = [...inputSets()];
-    const setToCopy = sets[indexToCopy];
+// Function to copy a set of inputs
+const copySet = (indexToCopy) => {
+  setInputSets((prevSets) => {
+    const setToCopy = prevSets[indexToCopy];
     const newSet = deepClone(setToCopy); // Deep clone the set
-    setInputSets([...sets, newSet]); // Add the cloned set to the state
-  };
-
+    return [...prevSets, newSet]; // Add the cloned set to the state
+  });
+};
 
 
 
@@ -268,8 +268,15 @@ return (
     <h1>&SHUFL Price Calculator</h1>
     <For each={inputSets()}>
       {(set, index) => (
-        <div class="set" key={index()}>
-          <label for={`panelType-${index}`}>Panel Type:</label><Dropdown id={`panelType-${index}`} options={panelTypeOptions} value={set.panelType} onChange={(value) => handlePanelTypeChange(value, index())} />
+        <div class="set" key={`set-${index}-${JSON.stringify(set)}`}>
+          
+          <label for={`panelType-${index}`}>Panel Type:</label>      <Dropdown 
+        id={`panelType-${index}`} 
+        options={panelTypeOptions} 
+        value={set.panelType} 
+        onChange={(value) => handlePanelTypeChange(value, index())} 
+       key={`${set.panelType}-${index()}`} // Example of a more unique key, combine multiple values to ensure uniqueness
+/>  
           <label for={`material-${index}`}>Material:</label><Dropdown id={`material-${index}`} options={materialOptions} value={set.material} onChange={(value) => handleMaterialChange(value, index())} />
           <label for={`width-${index}`}>Width:</label><InputField id={`width-${index}`} value={set.width} onInput={(value) => handleWidthInput(value, index())} />
           <label for={`height-${index}`}>Height:</label><InputField id={`height-${index}`} value={set.height} onInput={(value) => handleHeightInput(value, index())} />
@@ -295,11 +302,3 @@ return (
 );
 }
 export default App;
-
-
-
-
-
-
-
-
