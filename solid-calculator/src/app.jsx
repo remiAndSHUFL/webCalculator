@@ -5,7 +5,7 @@ import PriceDisplay from './components/PriceDisplay';
 import Checkbox from './components/Checkbox';
 import PriceDisplayOneSet from './components/PriceOneSet';
 import './style_calc.css';
-import SquareMetersDisplay from './components/SquareMetersDisplay';
+//import SquareMetersDisplay from './components/SquareMetersDisplay';
 
 function App() {
   // Dropdown states for different dropdowns
@@ -106,22 +106,22 @@ function App() {
 
 
   //__________________________________________________
-  const defaultInputSet = () => ({
-    material: createSignal('none'),
-    panelType: createSignal('none'),
-    width: createSignal('10'),
-    height: createSignal('20'),
-    insideHandle: createSignal(false),
-    handlePlace: createSignal('none'),
-    drillHoles: createSignal(false),
-    dLine: createSignal('none'),
-    edges: createSignal('none'),
-    edgesSub: createSignal('none'),
-    handType: createSignal('none'),
-    handAddOn: createSignal('none'),
-    colColor: createSignal('none'),
-    howMany: createSignal('one'),
-  });
+  const defaultInputSet = {
+    material: 'none',
+    panelType: 'none',
+    width: '50',
+    height: '100',
+    insideHandle: false,
+    handlePlace: 'none',
+    drillHoles: false,
+    dLine: 'none',
+    edges: 'none',
+    edgesSub: 'none',
+    handType: 'none',
+    handAddOn: 'none',
+    colColor: 'none',
+    howMany: 'one',
+  };
 
   // State for all sets of inputs
   const [inputSets, setInputSets] = createSignal([defaultInputSet]);
@@ -130,20 +130,29 @@ function App() {
 
   // Function to add a new set of inputs
   const addNewSet = () => {
-    setInputSets([...inputSets(), { 
-      ...defaultInputSet, 
-      insideHandle: false, // Default unchecked state for new sets
-      drillHoles: false, // Default unchecked state for new sets
-      width: '0', // Default width value for new sets
-      height: '0', // Default height value for new sets
-      // Include any other properties that need default values
-    }]);
+    setInputSets([...inputSets(), { ...defaultInputSet }]);
   };
-  
   // Function to remove a set of inputs
   const removeSet = (indexToRemove) => {
     setInputSets(inputSets().filter((_, index) => index !== indexToRemove));
   };
+  // Function to deep clone an object including nested objects
+  const deepClone = (obj) => {
+    return JSON.parse(JSON.stringify(obj));
+  };
+
+  // Function to copy a set of inputs
+  const copySet = (indexToCopy) => {
+    const sets = [...inputSets()];
+    const setToCopy = sets[indexToCopy];
+    const newSet = deepClone(setToCopy); // Deep clone the set
+    setInputSets([...sets, newSet]); // Add the cloned set to the state
+  };
+
+
+
+
+
 
 
 
@@ -162,82 +171,77 @@ function App() {
   };
   const handleWidthInput = (value, index) => {
     const sets = [...inputSets()];
-    sets[index].width(value);  // Update the reactive signal
+    sets[index].width = value; // Sets the width property of the set at the given index
     setInputSets(sets);
   };
-
   const handleHeightInput = (value, index) => {
     const sets = [...inputSets()];
-    sets[index].height(value); // Update the reactive signal
+    sets[index].height = value;
+    setInputSets(sets);
+  };
+  // Handler for handle place dropdown change
+  const handleHandlePlaceChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].handlePlace = value;
+    setInputSets(sets);
+  };
+  // Handler for dLine dropdown change
+  const handledLineChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].dLine = value;
+    setInputSets(sets);
+  };
+  // Handler for edges dropdown change
+  const handleEdgesChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].edges = value;
+    setInputSets(sets);
+  };
+  // Handler for edges sub-option dropdown change
+  const handleEdgesSubChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].edgesSub = value;
+    setInputSets(sets);
+  };
+  // Handler for handle type dropdown change
+  const handleHandTypeChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].handType = value;
+    setInputSets(sets);
+  };
+  // Handler for handle add-on dropdown change
+  const handleHandAddOnChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].handAddOn = value;
+    setInputSets(sets);
+  };
+  // Handler for color dropdown change
+  const handleColColorChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].colColor = value;
+    setInputSets(sets);
+  };
+  // Handler for "how many" dropdown change
+  const handleHowManyChange = (value, index) => {
+    const sets = [...inputSets()];
+    sets[index].howMany = value;
+    setInputSets(sets);
+  };
+  // Correct Toggle Handler
+  const handleInsideHandleToggle = (checked, index) => {
+    const sets = [...inputSets()];
+    sets[index].insideHandle = checked; // toggling the current value
+    setInputSets(sets);
+  };
+  // Handler for drill holes checkbox toggle
+  const handleDrillHolesToggle = (checked, index) => {
+    const sets = [...inputSets()];
+    sets[index].drillHoles = checked;
     setInputSets(sets);
   };
 
-// Handler for handle place dropdown change
-const handleHandlePlaceChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].handlePlace = value;
-  setInputSets(sets);
-};
-// Handler for dLine dropdown change
-const handledLineChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].dLine = value;
-  setInputSets(sets);
-};
-// Handler for edges dropdown change
-const handleEdgesChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].edges = value;
-  setInputSets(sets);
-};
-// Handler for edges sub-option dropdown change
-const handleEdgesSubChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].edgesSub = value;
-  setInputSets(sets);
-};
-// Handler for handle type dropdown change
-const handleHandTypeChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].handType = value;
-  setInputSets(sets);
-};
-// Handler for handle add-on dropdown change
-const handleHandAddOnChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].handAddOn = value;
-  setInputSets(sets);
-};
-// Handler for color dropdown change
-const handleColColorChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].colColor = value;
-  setInputSets(sets);
-};
-// Handler for "how many" dropdown change
-const handleHowManyChange = (value, index) => {
-  const sets = [...inputSets()];
-  sets[index].howMany = value;
-  setInputSets(sets);
-};
-// Correct Toggle Handler
-const handleInsideHandleToggle = (checked, index) => {
-  const sets = [...inputSets()];
-  sets[index].insideHandle = checked; // toggling the current value
-  setInputSets(sets);
-};
-// Handler for drill holes checkbox toggle
-const handleDrillHolesToggle = (checked, index) => {
-  const sets = [...inputSets()];
-  sets[index].drillHoles = checked;
-  setInputSets(sets);
-};
 
 
-const calculateSquareMeters = (width, height) => {
-  // Assuming width and height are strings, convert them to numbers and calculate square meters
-  return (Number(width) * Number(height)) / 10000; // Convert cm² to m² if needed
-};
 
 
   // Function to calculate the price based on selected options
@@ -267,9 +271,8 @@ return (
         <div class="set" key={index()}>
           <label for={`panelType-${index}`}>Panel Type:</label><Dropdown id={`panelType-${index}`} options={panelTypeOptions} value={set.panelType} onChange={(value) => handlePanelTypeChange(value, index())} />
           <label for={`material-${index}`}>Material:</label><Dropdown id={`material-${index}`} options={materialOptions} value={set.material} onChange={(value) => handleMaterialChange(value, index())} />
-          <label for={`width-${index}`}>Width:</label><InputField value={set.width()} onInput={(value) => handleWidthInput(value, index())} />
-          <label for={`height-${index}`}>Height:</label><InputField value={set.height()} onInput={(value) => handleHeightInput(value, index())} />
-          <SquareMetersDisplay width={set.width()} height={set.height()} />
+          <label for={`width-${index}`}>Width:</label><InputField id={`width-${index}`} value={set.width} onInput={(value) => handleWidthInput(value, index())} />
+          <label for={`height-${index}`}>Height:</label><InputField id={`height-${index}`} value={set.height} onInput={(value) => handleHeightInput(value, index())} />
           <Checkbox checked={set.insideHandle} label="Inside Handle " onToggle={(checked) => handleInsideHandleToggle(checked, index())} />
           <label for={`hand_place-${index}`}>Handle Placement:</label><Dropdown id={`hand_place-${index}`} options={handlePlaceOptions} value={set.handlePlace} onChange={(value) => handleHandlePlaceChange(value, index())} />
           <Checkbox checked={set.drillHoles} label="Drill Holes " onToggle={(checked) => handleDrillHolesToggle(checked, index())} />
@@ -281,6 +284,7 @@ return (
           <label for={`color-${index}`}>Color:</label><Dropdown id={`color-${index}`} options={colColorOptions} value={set.colColor} onChange={(value) => handleColColorChange(value, index())} />
           <label for={`how_many-${index}`}>How many:</label><Dropdown id={`how_many-${index}`} options={howManyOptions} value={set.howMany} onChange={(value) => handleHowManyChange(value, index())} />
           <PriceDisplayOneSet price={set.priceOneSet} />
+          <button onClick={() => copySet(index())}>Copy</button>
           <button onClick={() => removeSet(index())}>Remove</button>
         </div>
       )}
