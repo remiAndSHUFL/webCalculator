@@ -107,20 +107,20 @@ function App() {
 
   //__________________________________________________
   const defaultInputSet = {
-    material: 'none',
-    panelType: 'none',
+    material: materialOptions[0].value, // Assuming 'none' corresponds to the first option
+    panelType: panelTypeOptions[0].value,
     width: '50',
     height: '100',
     insideHandle: false,
-    handlePlace: 'none',
+    handlePlace: handlePlaceOptions[0].value,
     drillHoles: false,
-    dLine: 'none',
-    edges: 'none',
-    edgesSub: 'none',
-    handType: 'none',
-    handAddOn: 'none',
-    colColor: 'none',
-    howMany: 'one',
+    dLine: dLineOptions[0].value,
+    edges: edgesOptions[0].value,
+    edgesSub: edgesSubOptions[0].value,
+    handType: handTypeOptions[0].value,
+    handAddOn: handAddOnnOptions[0].value,
+    colColor: colColorOptions[0].value,
+    howMany: howManyOptions[0].value,
   };
 
   // State for all sets of inputs
@@ -128,10 +128,32 @@ function App() {
 
 
 
-  // Function to add a new set of inputs
-  const addNewSet = () => {
-    setInputSets([...inputSets(), { ...defaultInputSet }]);
-  };
+
+
+// Function to add a new set of inputs with predefined default values
+const addNewSet = () => {
+  setInputSets((prevSets) => [
+    ...prevSets,
+    {
+      material: materialOptions[0].value,
+      panelType: panelTypeOptions[0].value,
+      width: '50',
+      height: '100',
+      insideHandle: false,
+      handlePlace: handlePlaceOptions[0].value,
+      drillHoles: false,
+      dLine: dLineOptions[0].value,
+      edges: edgesOptions[0].value,
+      edgesSub: edgesSubOptions[0].value,
+      handType: handTypeOptions[0].value,
+      handAddOn: handAddOnnOptions[0].value,
+      colColor: colColorOptions[0].value,
+      howMany: howManyOptions[0].value,
+    }
+  ]);
+};
+
+  
   // Function to remove a set of inputs
   const removeSet = (indexToRemove) => {
     setInputSets(inputSets().filter((_, index) => index !== indexToRemove));
