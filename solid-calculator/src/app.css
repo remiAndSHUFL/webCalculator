@@ -37,17 +37,3 @@ p {
     max-width: none;
   }
 }
-
-.set {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.set > * {
-  flex: 1; /* This makes each item flex and take up equal space */
-  min-width: 120px; /* This ensures that items don't become too narrow */
-}

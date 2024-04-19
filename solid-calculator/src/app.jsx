@@ -5,25 +5,39 @@ import PriceDisplay from './components/PriceDisplay';
 import Checkbox from './components/Checkbox';
 import PriceDisplayOneSet from './components/PriceOneSet';
 import './style_calc.css';
-//import SquareMetersDisplay from './components/SquareMetersDisplay';
+import { calculateTotalPrice } from './calculation/priceCalculation.js';
+import SquareMetersDisplay from './components/SquareMetersDisplay';
+
 
 function App() {
-  // Dropdown states for different dropdowns
-  const [material, setMaterial] = createSignal('');
-  const materialOptions = [
-    { label: 'None', value: 'none' },
-    { label: 'Laminat ABS', value: 'lam_abs' },
-    { label: 'Laminat Wood', value: 'lam_wood' },
-    { label: 'Linoleum Wood', value: 'lin_wood' },
-    // ...other material options
-  ];
 
   const [panelType, setPanelType] = createSignal('');
   const panelTypeOptions = [
     { label: 'None', value: 'none' },
     { label: 'Front Panel Drawer', value: 'front_pan_draw' },
     { label: 'Front Panel Door', value: 'front_pan_door' },
+    { label: 'Side Panel', value: 'side_panel' },
+    { label: 'Kick Board', value: 'kick_board' },
+    { label: 'Table Top', value: 'table_top' },
     // Add other panel types as needed
+  ];
+
+  // Dropdown states for different dropdowns
+  const [material, setMaterial] = createSignal('');
+  const materialOptions = [
+    { label: 'None', value: 'none' },
+    { label: 'Laminat ABS', value: 'lam_abs' },
+    { label: 'Laminat Wood', value: 'lam_wood' },
+    { label: 'Wood Wood', value: 'wood_wood' },
+    { label: 'Linoleum Wood', value: 'lin_wood' },
+    { label: 'Fenix ABS', value: 'fenix_abs' },
+    { label: 'Fenix Wood', value: 'fenix_wood' },
+    { label: 'Core Darksoil', value: 'lcore_darksoil' },
+    { label: 'Core Golden Leaves', value: 'core_g_leaves' },
+    { label: 'Core Grey Clay', value: 'core_g_clay' },
+    { label: 'Painted On Wood (BK)', value: 'painted_o_wood' },
+    { label: 'Painted (BK)', value: 'painted' },
+    { label: 'Raw', value: 'raw' },
   ];
 
   const [handlePlace, setHandlePlace] = createSignal('');
@@ -297,11 +311,12 @@ return (
         options={panelTypeOptions} 
         value={set.panelType} 
         onChange={(value) => handlePanelTypeChange(value, index())} 
-       key={`${set.panelType}-${index()}`} // Example of a more unique key, combine multiple values to ensure uniqueness
+        key={`${set.panelType}-${index()}`} // Example of a more unique key, combine multiple values to ensure uniqueness
 />  
           <label for={`material-${index}`}>Material:</label><Dropdown id={`material-${index}`} options={materialOptions} value={set.material} onChange={(value) => handleMaterialChange(value, index())} />
           <label for={`width-${index}`}>Width:</label><InputField id={`width-${index}`} value={set.width} onInput={(value) => handleWidthInput(value, index())} />
           <label for={`height-${index}`}>Height:</label><InputField id={`height-${index}`} value={set.height} onInput={(value) => handleHeightInput(value, index())} />
+          <SquareMetersDisplay width={set.width} height={set.height} />
           <Checkbox checked={set.insideHandle} label="Inside Handle " onToggle={(checked) => handleInsideHandleToggle(checked, index())} />
           <label for={`hand_place-${index}`}>Handle Placement:</label><Dropdown id={`hand_place-${index}`} options={handlePlaceOptions} value={set.handlePlace} onChange={(value) => handleHandlePlaceChange(value, index())} />
           <Checkbox checked={set.drillHoles} label="Drill Holes " onToggle={(checked) => handleDrillHolesToggle(checked, index())} />
