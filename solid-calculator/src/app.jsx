@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js';
+import { createEffect } from 'solid-js';
 import Dropdown from './components/Dropdown';
 import InputField from './components/InputField';
 import PriceDisplay from './components/PriceDisplay';
@@ -192,6 +193,8 @@ const copySet = (indexToCopy) => {
 
 
 
+
+
     
   // Update handlers to accept an index and update a specific set
   // Handler for panel type dropdown change
@@ -275,9 +278,42 @@ const copySet = (indexToCopy) => {
     sets[index].drillHoles = checked;
     setInputSets(sets);
   };
+//_______________________________________________________
+
+  // Example function to send data to the Grasshopper server
+  const sendToGrasshopper = async () => {
+    const payload = {
+      definition: 'firstGeometry.gh',  // Ensure this is the correct Grasshopper file name
+      inputs: inputSets().map(set => ({
+        //panelType: set.panelType,
+        //material: set.material,
+        width: set.width,
+        height: set.height,
+        handlePlace: set.handlePlace,
+        //edges: set.edges,
+        // Include other necessary parameters from your state
+      }))
+    };
+
+    try {
+      const response = await fetch('http://localhost:8081/solve', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error('Network response was not ok.');
+
+      const result = await response.json();
+      console.log('Geometry Data:', result);  // Or update the state to render the geometry
+      // Update UI based on this result
+    } catch (error) {
+      console.error('Failed to send data to Grasshopper:', error);
+    }
+  };
 
 
 
+//_______________________________________________________
 
 
   // Function to calculate the price based on selected options
@@ -335,6 +371,7 @@ return (
     </For>
     </div>
     <button onClick={addNewSet}>Add</button>
+    <button onClick={sendToGrasshopper}>Submit to Grasshopper</button>
   </div>
 );
 }
