@@ -10,6 +10,7 @@ import { calculateTotalPrice } from './calculation/priceCalculation.js';
 import SquareMetersDisplay from './components/SquareMetersDisplay';
 
 
+
 function App() {
 
   const [panelType, setPanelType] = createSignal('');
@@ -44,9 +45,9 @@ function App() {
   const [handlePlace, setHandlePlace] = createSignal('');
   const handlePlaceOptions = [
     { label: 'None', value: 'none' },
-    { label: 'TC', value: 'tc' },
-    { label: 'TL', value: 'tl' },
-    { label: 'TR', value: 'tr' },
+    { label: 'TC', value: '1' },
+    { label: 'TL', value: '2' },
+    { label: 'TR', value: '3' },
     // Add other panel types as needed
   ];
 
@@ -279,43 +280,93 @@ const copySet = (indexToCopy) => {
     setInputSets(sets);
   };
 //_______________________________________________________
-
-  // Example function to send data to the Grasshopper server
-  const sendToGrasshopper = async () => {
-    const payload = {
-      definition: 'firstGeometry.gh',  // Ensure this is the correct Grasshopper file name
-      inputs: inputSets().map(set => ({
-        //panelType: set.panelType,
-        //material: set.material,
-        width: set.width,
-        height: set.height,
-        handlePlace: set.handlePlace,
-        //edges: set.edges,
-        // Include other necessary parameters from your state
-      }))
-    };
-
-    try {
-      const response = await fetch('http://localhost:8081/solve', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error('Network response was not ok.');
-
-      const result = await response.json();
-      console.log('Geometry Data:', result);  // Or update the state to render the geometry
-      // Update UI based on this result
-    } catch (error) {
-      console.error('Failed to send data to Grasshopper:', error);
-    }
+/*
+const sendToGrasshopper = async () => {
+  const payload = {
+    definition: 'firstGeometry.gh', // Ensure this is the correct Grasshopper file name
+    inputs: inputSets().map(set => ({
+      width: set.width,
+      height: set.height,
+      //handlePlace: set.handlePlace,
+      //panelType: set.panelType,
+      // Include other necessary parameters from your state here
+    }))
   };
+
+  //log the payload to the console
+  console.log('Payload:', payload);
+
+  //log the JSON  
+  const jsoonPayload = JSON.stringify(payload);
+  console.log('JSON:', jsoonPayload);
+
+
+
+  try {
+    const response = await fetch('http://localhost:3000/solve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) throw new Error(`Error sending data: ${response.statusText}`);
+
+    const result = await response.json();
+    console.log('Geometry Data:', result);  // Or update the state to render the geometry
+    // Update UI based on this result
+  } catch (error) {
+    console.error('Failed to send data to Grasshopper:', error);
+  }
+};
+*/
+const sendToGrasshopper = async () => {
+  // Get the input sets from SolidJS, which might be an array of objects
+  const inputArray = inputSets();
+
+  // Initialize an empty object to hold all inputs
+  const inputs = {};
+
+  // Aggregate all inputs into a single object
+  inputArray.forEach(set => {
+    // For each property in the set, add it to the inputs object
+    // Ensure that the properties match what Grasshopper expects
+    if (set.width) inputs.width = Number(set.width);
+    if (set.height) inputs.height = Number(set.height);
+    if (set.handlePlace) inputs.handlePlace = set.handlePlace;
+    // Continue for other properties as necessary
+  });
+
+  const payload = {
+    definition: 'workingGeo.gh', // Ensure this is the correct Grasshopper file name
+    inputs: inputs
+  };
+
+  console.log("Sent payload:", payload); // Log the corrected payload
+    //log the JSON  
+    const jsoonPayload = JSON.stringify(payload);
+    console.log('JSON structure:', jsoonPayload);
+
+  try {
+    const response = await fetch('http://localhost:3000/solve', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) throw new Error(`Error sending data: ${response.statusText}`);
+
+    const result = await response.json();
+    console.log('Response from compute:', result);
+  } catch (error) {
+    console.error('Failed to send data to Grasshopper:', error);
+  }
+};
 
 
 
 //_______________________________________________________
 
-
+/*
   // Function to calculate the price based on selected options
   const calculatePrice = () => {
     // Placeholder for your price calculation logic
@@ -323,14 +374,14 @@ const copySet = (indexToCopy) => {
     // For now, we'll just set a dummy value
     setPrice(42); // Replace with actual calculation
   };
-
+/*
   const calculatePriceOneSet = () => {
     // Placeholder for your price calculation logic
     // You would use the states like `material()`, `dimension()`, etc.
     // For now, we'll just set a dummy value
     setPriceOneSet(10); // Replace with actual calculation
   };
-
+*/
 
 
 // Render function
